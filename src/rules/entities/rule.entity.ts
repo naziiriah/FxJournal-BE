@@ -2,13 +2,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   CreateDateColumn,
+  ManyToOne,
 } from 'typeorm';
-import { Trade } from '../../trades/entities/trade.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
-export class User {
+export class Rule {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -16,14 +16,14 @@ export class User {
   email: string;
 
   @Column()
-  password: string; // Will be hashed in service layer
+  title: string; // Will be hashed in service layer
 
   @Column({ nullable: true })
-  username: string;
+  expression: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => Trade, (trade) => trade.user)
-  trades: Trade[];
+  @ManyToOne(() => User, (user) => user.trades, { onDelete: 'CASCADE' })
+  user: User;
 }

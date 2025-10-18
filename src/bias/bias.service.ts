@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Bias } from './entities/bias.entity';
 import { UUID } from 'crypto';
+import { BiasRequest } from 'src/request/bias.request';
 
 @Injectable()
 export class BiasService {
@@ -24,10 +25,10 @@ export class BiasService {
     });
   }
 
-  async createBias(bias: Bias): Promise<string> {
+  async createBias(data: BiasRequest) {
     try {
-      this.biasRepo.create(bias);
-      return 'bias created succesfully';
+      const bias = this.biasRepo.create(data);
+      return await this.biasRepo.save(bias);
     } catch (error) {
       return 'failed';
     }

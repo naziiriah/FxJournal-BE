@@ -6,7 +6,6 @@ import {
   CreateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { Trade } from '../../trades/entities/trade.entity';
 import { User } from 'src/users/entities/user.entity';
 
 @Entity()
@@ -14,17 +13,20 @@ export class Bias {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  title: string;
+
   @Column({ nullable: false })
   currencyPair: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   Reason: string;
 
   @Column({ nullable: true })
-  PredictionscreenshotUrl: string;
+  beforeImageUrl: string;
 
   @Column({ nullable: true })
-  EndscreenshotUrl: string;
+  afterImageUrl: string;
 
   @ManyToOne(() => User, (user) => user.trades, { onDelete: 'CASCADE' })
   user: User;

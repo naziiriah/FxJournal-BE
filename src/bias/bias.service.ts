@@ -27,8 +27,17 @@ export class BiasService {
 
   async createBias(data: BiasRequest) {
     try {
-      const bias = this.biasRepo.create(data);
-      return await this.biasRepo.save(bias);
+      var bias = new Bias();
+        
+        bias.title = data.title;
+        bias.currencyPair = data.currencyPair;
+        bias.description = data.description;
+        bias.user = data.userId;
+        bias.beforeImageUrl = data.beforeImageUrl;
+      
+      
+      const biasData = this.biasRepo.create(bias);
+      return await this.biasRepo.save(biasData);
     } catch (error) {
       return 'failed';
     }

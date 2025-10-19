@@ -45,7 +45,7 @@ export class BiasController {
     @Body('description') description: string,
     @Req() req,
   ) {
-    const userId = req.user.userId;
+    const userId = req.user;
     const [beforeImage, afterImage] = files;
     const bias: BiasRequest = {
       title,
@@ -53,10 +53,11 @@ export class BiasController {
       userId,
       beforeImageUrl: beforeImage
         ? `/uploads/bias-images/${beforeImage.filename}`
-        : null,
+        : "null",
       afterImageUrl: afterImage
         ? `/uploads/bias-images/${afterImage.filename}`
         : null,
+      currencyPair: ''
     };
 
     this.biasService.createBias(bias);

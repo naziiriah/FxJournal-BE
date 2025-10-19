@@ -20,7 +20,7 @@ export class Bias {
   currencyPair: string;
 
   @Column({ nullable: true })
-  Reason: string;
+  description: string;
 
   @Column({ nullable: true })
   beforeImageUrl: string;
@@ -31,6 +31,6 @@ export class Bias {
   @ManyToOne(() => User, (user) => user.trades, { onDelete: 'CASCADE' })
   user: User;
 
-  @CreateDateColumn()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }

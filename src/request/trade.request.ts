@@ -11,13 +11,13 @@ export interface TradeRequest {
 
   strategy: string;
 
-  session: string;
+  session: "London" | "New York" | "Asia";
 
   dailyBias: string;
 
   tradeDirection: 'Buy' | 'Sell';
 
-  Result: boolean;
+  result: boolean;
 
   risk: string;
 
@@ -36,6 +36,4 @@ export interface TradeRequest {
   errorReason: string;
 
   screenshotUrl: string;
-
-  createdAt: Date;
 }

@@ -34,7 +34,7 @@ export class Trade {
   strategy: string;
 
   @Column({ nullable: true })
-  session: string;
+   session: "London" | "New York" | "Asia";
 
   @Column({ nullable: true })
   dailyBias: string;
@@ -43,7 +43,7 @@ export class Trade {
   tradeDirection: 'Buy' | 'Sell';
 
   @Column('boolean')
-  Result: boolean;
+  result: boolean;
 
   @Column({ nullable: true, type: 'text' })
   risk: string;

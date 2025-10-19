@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -17,6 +18,8 @@ import { extname } from 'path';
 import { AuthGuard } from '@nestjs/passport';
 import { TradeService } from './trades.service';
 import { Trade } from './entities/trade.entity';
+import { multerConfig } from 'src/config/multer.config';
+import { TradeRequest } from 'src/request/trade.request';
 
 @Controller('/trade')
 export class TradeController {
@@ -38,35 +41,36 @@ export class TradeController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post('upload')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './uploads/trade-screenshots',
-        filename: (req, file, cb) => {
-          const uniqueName = `${uuid()}${extname(file.originalname)}`;
-          cb(null, uniqueName);
-        },
-      }),
-      fileFilter: (req, file, cb) => {
-        if (!file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
-          return cb(new Error('Only image files are allowed!'), false);
-        }
-        cb(null, true);
-      },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file', multerConfig('trade-images')))
   createTrade(
-    trade: Trade,
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: CreateTradeDto,
+    @Req() req,
   ) {
-    const filePath = `/uploads/trades/${file.filename}`;
-    trade = { ...trade, screenshotUrl: filePath };
-    return {
-      message: 'File uploaded successfully',
-      path: filePath,
-      uploadedBy: trade.user.id,
-    };
+
+    const tradeReq: TradeRequest = {
+      symbol: req.symbol,
+      entryPrice: req.entryPrice,
+      exitPrice: req.exitPrice,
+      quantity: req.qunatity,
+      profitLoss: req.profitLoss,
+      strategy: req.strategy,
+      session: req.session,
+      dailyBias: req.dailyBias,
+      tradeDirection: req.tradeDirection,
+      result: req.Result,
+      risk: req.risk,
+      reward: req.reward,
+      entryTimeframe: req.entryTimeframe,
+      entryStructure: req.entryStructure,
+      entrySetup: req.entrySetup,
+      notes: req.notes,
+      error: req.error,
+      errorReason: req.errorReason,
+      screenshotUrl:  `/uploads/trades-images/${file.filename}`,
+    }
+    
+    this.tradeService.createTrade(tradeReq)
+   
   }
 
   @UseGuards(AuthGuard('jwt'))
